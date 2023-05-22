@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ecc.ncinside.dao.BoardMapper">
+
+    <select id="select" parameterType="int" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, up_date, type_no
+        FROM board
+        WHERE bno = #{bno}
+    </select>
+
+    <select id="selectAll" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        ORDER BY reg_date DESC , bno DESC
+    </select>
+
+<!--    <select id="selectPage" parameterType="map" resultType="BoardDto">-->
+<!--        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no-->
+<!--        FROM board-->
+<!--        WHERE type_no = 1       &lt;!&ndash; 임시 수정 &ndash;&gt;-->
+<!--        ORDER BY reg_date DESC, bno DESC-->
+<!--        LIMIT #{offset}, #{pageSize}-->
+<!--    </select>-->
+
+    <select id="selectPage" parameterType="map" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        WHERE type_no = #{typeNo}
+        ORDER BY reg_date DESC, bno DESC
+        LIMIT #{offset}, 10
+    </select>
+
+    <select id="mainCurrentSelectPage" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        ORDER BY reg_date DESC, bno DESC
+        LIMIT 0, 12
+    </select>
+
+    <select id="typeSelectPage" parameterType="int" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        WHERE type_no = #{type_no}
+        ORDER BY reg_date DESC, bno DESC
+        LIMIT 6
+    </select>
+
+    <select id="typeName" parameterType="int" resultType="String">
+        SELECT type_name
+        FROM type
+        WHERE type_no = #{type_no}
+    </select>
+
+    <select id="bestPage" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        ORDER BY view_cnt+comment_cnt DESC
+        LIMIT 10;
+    </select>
+
+    <insert id="insert" parameterType="BoardDto">
+        INSERT INTO board
+            (title, content, writer,type_no)
+        VALUES
+            (#{title},#{content},#{writer},#{type_no})
+    </insert>
+
+    <update id="update" parameterType="BoardDto">
+        UPDATE board
+        SET title = #{title},
+            content = #{content},
+            up_date = NOW()
+        WHERE bno = #{bno};
+    </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM board WHERE bno = #{bno} AND writer = #{writer}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM board
+    </delete>
+
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM board
+    </select>
+
+    <select id="count" resultType="int" parameterType="int">
+        SELECT COUNT(*) FROM board
+        WHERE type_no = #{typeNo}
+    </select>
+
+    <update id="updateCommentCnt" parameterType="map">
+        UPDATE board
+        SET comment_cnt = comment_cnt + #{cnt}
+        WHERE bno = #{bno}
+    </update>
+
+    <update id="increaseViewCnt" parameterType="int">
+        UPDATE board
+        SET view_cnt = view_cnt + 1
+        WHERE bno = #{bno}
+    </update>
+
+    <select id="searchSelectPage" parameterType="SearchCondition" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        WHERE true
+          <choose>
+              <when test='option == "T"'>
+                  AND title LIKE CONCAT('%', #{keyword}, '%')
+              </when>
+              <when test='option == "W"'>
+                  AND writer LIKE CONCAT('%', #{keyword}, '%')
+              </when>
+              <otherwise>
+                  AND (title LIKE CONCAT('%', #{keyword}, '%')
+                  OR content LIKE CONCAT('%', #{keyword}, '%'))
+              </otherwise>
+          </choose>
+        AND type_no = #{typeNo}
+        ORDER BY reg_date DESC, bno DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="mainSearchGalleyNameList" parameterType="String" resultType="String">
+        SELECT type_name
+        FROM type
+        WHERE type_name LIKE CONCAT ( '%', #{keyword}, '%')
+    </select>
+
+    <select id="mainSearchGalleyNoList" parameterType="String" resultType="int">
+        SELECT type_no
+        FROM type
+        WHERE type_name LIKE CONCAT ( '%', #{keyword}, '%')
+    </select>
+
+    <select id="mainSearchContentList" parameterType="String" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, type_no
+        FROM board
+        WHERE true
+        AND content LIKE CONCAT( '%', #{keyword}, '%')
+        OR title LIKE CONCAT( '%', #{keyword}, '%')
+    </select>
+
+    <select id="searchResultCnt" parameterType="SearchCondition" resultType="int">
+        SELECT COUNT(*)
+        FROM board
+        WHERE true
+          AND title LIKE concat( '%', #{keyword}, '%')
+          AND type_no = #{typeNo}
+    </select>
+
+    <select id="moreList" resultType="map">
+        SELECT type_no, type_name
+        FROM type
+    </select>
+
+    <insert id="addBookMark" parameterType="map">
+        INSERT INTO bookmark (id, bkno)
+        VALUES (#{id}, #{bno});
+    </insert>
+
+    <select id="usersBookMarkListNo" parameterType="String" resultType="int">
+        SELECT bkno
+        FROM bookmark
+        WHERE id = #{id}
+    </select>
+
+    <select id="bookMarkList" parameterType="java.util.List" resultType="BoardDto">
+        SELECT bno, title, content, writer, view_cnt, comment_cnt, reg_date, up_date, type_no
+        FROM board
+        WHERE bno IN
+        <foreach item="list" collection="list" index="index" open="(" close=")" separator=",">
+            #{list}
+        </foreach>
+    </select>
+
+    <delete id="bookMarkDelete" parameterType="int">
+        DELETE FROM bookmark
+        WHERE bkno = #{bno}
+    </delete>
+</mapper>

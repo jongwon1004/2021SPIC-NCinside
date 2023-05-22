@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ecc.ncinside.dao.CommentMapper">
+    <delete id="deleteAllCmt" parameterType="int">
+        DELETE FROM comment
+        WHERE  bno = #{bno}
+    </delete>
+
+    <select id="countCmt" parameterType="int" resultType="int">
+        SELECT count(*) FROM comment
+        WHERE  bno = #{bno}
+    </select>
+
+    <delete id="deleteCmt" parameterType="map">
+        DELETE FROM comment WHERE cno = #{cno} AND commenter = #{commenter}
+    </delete>
+
+    <insert id="insertCmt" parameterType="CommentDto">
+        INSERT INTO comment
+            (bno, pcno, comment, commenter, reg_date, up_date)
+        VALUES
+            (#{bno}, #{pcno}, #{comment}, #{commenter}, now(), now())
+    </insert>
+
+    <select id="selectAllCmt" parameterType="int" resultType="CommentDto">
+        SELECT cno, bno, pcno, comment, commenter, reg_date, up_date
+        FROM comment
+        WHERE bno = #{bno}
+        ORDER BY reg_date ASC, cno ASC
+    </select>
+
+    <select id="selectCmt" parameterType="int" resultType="CommentDto">
+        SELECT cno, bno, pcno, comment, commenter, reg_date, up_date
+        FROM comment
+        WHERE cno = #{cno}
+    </select>
+
+    <update id="updateCmt" parameterType="CommentDto">
+        UPDATE comment
+        SET comment = #{comment}
+          , up_date = now()
+        WHERE cno = #{cno} and commenter = #{commenter}
+    </update>
+</mapper>

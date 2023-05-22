@@ -1,0 +1,277 @@
+body {
+    margin: 0 auto;
+}
+.header {
+    margin-top: 20px;
+    width: 100%;
+}
+.header > .inner {
+    margin: 0 auto;
+    width: 1200px;
+    border: 1px solid 2px;
+}
+.header > .inner > .header-box {
+    justify-content: space-between;
+    display: flex;
+}
+.header > .inner > .header-box > .logo {
+    width: 330px;
+    height: 70px;
+}
+.logo .N {
+    font-family: "Lobster", cursive;
+    font-size: 40px;
+    color: skyblue;
+}
+.logo .C {
+    font-family: "Lobster", cursive;
+    font-size: 40px;
+    color: greenyellow;
+}
+.logo .inside {
+    font-family: "Lobster", cursive;
+    font-size: 40px;
+    color: orange;
+}
+.header > .inner > .header-box > .search {
+    width: 600px;
+    height: 70px;
+    display: flex;
+}
+.logo > .com {
+    color: blue;
+    font-family: "Kosugi Maru", sans-serif;
+}
+.search-box {
+    width: 500px;
+    height: 45px;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    background-image: linear-gradient(#fff, #fff),
+    linear-gradient(to right, #fbfcb9be, #ffcdf3aa, #65d3ffaa);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    /* margin: 10px; */
+}
+.search-box > input {
+    height: 40px;
+    width: 265px;
+    border: none;
+
+    /* background-color: aqua; */
+}
+.search-box > .searchBtnBox {
+    width: 50px;
+    height: 40px;
+    justify-content: right;
+}
+.header > .inner > .header-box > .alarm {
+    width: 270px;
+    height: 70px;
+}
+.header > .inner > .header-box > .alarm > ul {
+    margin-top: 0%;
+}
+.header > .inner > .header-box > .alarm > ul > li {
+    list-style: none;
+    float: right;
+    font-size: 15px;
+}
+.nav {
+    width: 100%;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+.nav > .navInner {
+    margin: 0 auto;
+    width: 1200px;
+}
+.nav > .navInner > .navBox {
+    justify-content: space-between;
+    display: flex;
+}
+.nav > .navInner > .navBox > .navBar {
+    width: 930px;
+    height: 60px;
+}
+.nav > .navInner > .navBox > .navBar > ul {
+    flex-direction: column;
+    align-items: center;
+    height: 60px;
+}
+.nav > .navInner > .navBox > .navMigi > ul {
+    height: 60px;
+}
+.nav > .navInner > .navBox > .navBar > ul > li {
+    margin-right: 15px;
+    position: relative;
+    text-decoration: none;
+    float: left;
+    list-style: none;
+    color: black;
+    font-size: 22px;
+    font-family: "Kosugi Maru", sans-serif;
+}
+.nav > .navInner > .navBox > .navMigi > ul > li {
+    margin-left: 25px;
+    text-decoration: none;
+    float: right;
+    list-style: none;
+    color: black;
+    font-size: 20px;
+    font-family: "Kosugi Maru", sans-serif;
+}
+.nav > .navInner > .navBox > .navMigi {
+    width: 270px;
+    height: 60px;
+}
+.userImage {
+    margin-top: 50px;
+    width: 100%;
+}
+.userImage > .userImageInner {
+    margin: 0 auto;
+    width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+.welcomeBox {
+    width: 100%;
+}
+.welcomeBox > .welcomeBoxInner {
+    margin: 0 auto;
+    width: 1200px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+}
+.welcomeBox > .welcomeBoxInner > .welcomeText {
+    font-size: 50px;
+}
+.BOX {
+    margin-top: 50px;
+    width: 100%;
+}
+.BOX > .BoxInner {
+    width: 1200px;
+    margin: 0 auto;
+    height: 300px;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    background-image: linear-gradient(#fff, #fff),
+    linear-gradient(to right, #fbfcb9be, #ffcdf3aa, #65d3ffaa);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+
+}
+.BOX > .BoxInner > .information {
+    margin-top: 10px;
+    width: 1200px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+}
+.BOX > .BoxInner > .information > .IDBox {
+    display: flex;
+    height: 80px;
+    font-size: 30px;
+}
+.BOX > .BoxInner > .information > .passwordBox {
+    display: flex;
+    height: 80px;
+    font-size: 30px;
+}
+#ID {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+.BOX > .BoxInner > .information > .passwordBox > #PW {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+#IDText {
+    width: 350px;
+    height: 50px;
+    border: 1px solid #65d3ffaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+#passwordText {
+    width: 350px;
+    height: 50px;
+    border: 1px solid #65d3ffaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+.BOX > .BoxInner > .EmailIn {
+    margin-top: -30px;
+    width: 1200px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+}
+.BOX > .BoxInner > .EmailIn > .EmailBox {
+    display: flex;
+    height: 80px;
+    font-size: 35px;
+}
+.BOX > .BoxInner > .EmailIn > .EmailBox > #Email {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+.BOX > .BoxInner > .EmailIn > .EmailBox > #EmailText {
+    width: 600px;
+    height: 50px;
+    border: 1px solid #65d3ffaa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    margin-left: 10px;
+}
+.BOX > .BoxInner > .changeIN {
+    margin-top: -30px;
+    width: 1200px;
+    height: 100px;
+    display: flex;
+    justify-content: space-around;
+}
+.BOX > .BoxInner > .changeIN > .changeBox {
+    margin-top: 40px;
+    display: flex;
+    height: 80px;
+}
+.BOX > .BoxInner > .changeIN > .changeBox > button {
+    width: 400px;
+    height: 50px;
+    background-color: aqua;
+    border: 1px solid aqua;
+    font-size: 30px;
+    font-family: "Tilt Neon", cursive;
+    border-radius: 10px;
+}
+.footer-box {
+    border-top: 3px solid black;
+    margin-top: 50px;
+    width: 100%;
+    height: 100px;
+}
+.footer-box > #copyright {
+    margin: 0 auto;
+    width: 1200px;
+    height: 100px;
+    text-align: center;
+    padding-top: 50px;
+}

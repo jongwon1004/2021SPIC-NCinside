@@ -1,0 +1,129 @@
+@GetMapping("/list")
+    public String list(@RequestParam(defaultValue ="1") Integer page,
+                       @RequestParam(defaultValue = "10") Integer pageSize,Model m, HttpServletRequest request) {
+        if(!loginCheck(request))
+            return "redirect:/login/login?toURL="+request.getRequestURL(); // 로그인을 안했으면 로그인 화면으로 이동
+
+        try {
+            int totalCnt = boardService.getCount();
+            m.addAttribute("totalCnt", totalCnt);
+
+            PageHandler pageHandler = new PageHandler(totalCnt, page, pageSize);
+
+            if(page < 0 || page > pageHandler.getTotalPage())
+                page = 1;
+            if(pageSize < 0 || pageSize > 50)
+                pageSize = 10;
+
+            Map map = new HashMap();
+            map.put("offset", (page-1)*pageSize);
+            map.put("pageSize", pageSize);
+
+            List<BoardDto> list = boardService.getPage(map);
+            m.addAttribute("list", list);
+            m.addAttribute("ph", pageHandler);
+
+            Instant startOfToday = LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant();
+            m.addAttribute("startOfToday", startOfToday.toEpochMilli());
+        } catch (Exception e) {
+            e.printStackTrace();
+            m.addAttribute("msg", "LIST_ERR");
+            m.addAttribute("totalCnt", 0);
+        }
+
+        return "boardList"; // 로그인을 한 상태이면, 게시판 화면으로 이동
+    }
+
+
+    <table border="1">
+            <c:forEach var="boardDto" items="${list}">
+                <ul>
+                    <li>${boardDto.bno}</li>
+                    <li><a href="<c:url value='/board/read?bno=${boardDto.bno}&page=${page}&pageSize=${pageSize}'/>">${boardDto.title}</a></li>
+                    <li>${boardDto.writer}</li>
+                    <li>${boardDto.reg_date}</li>
+                    <li>${boardDto.view_cnt}</li>
+                </ul>
+            </c:forEach>
+        </table>
+
+
+        <c:choose>
+            <c:when test="${boardDto.reg_date.time >= startOfToday}">
+                <td class="regdate"><fmt:formatDate value="${boardDto.reg_date}" pattern="HH:mm" type="time"/></td>
+            </c:when>
+            <c:otherwise>
+                <td class="regdate"><fmt:formatDate value="${boardDto.reg_date}" pattern="yyyy-MM-dd" type="date"/></td>
+            </c:otherwise>
+        </c:choose>
+
+
+        package first.service;
+
+        import first.dao.BoardDao;
+        import first.domain.BoardDto;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Service;
+
+        import java.util.List;
+        import java.util.Map;
+
+        @Service
+        public class BoardServiceImpl implements BoardService {
+            @Autowired
+            private BoardDao boardDao;
+
+            @Override
+            public int getCount() throws Exception {
+                return boardDao.count();
+            }
+
+            @Override
+            public int remove(Integer bno, String writer) throws Exception {
+                return boardDao.delete(bno, writer);
+            }
+
+            @Override
+            public int write(BoardDto boardDto) throws Exception {
+                return boardDao.insert(boardDto);
+            }
+
+            @Override
+            public List<BoardDto> getList() throws Exception {
+                return boardDao.selectAll();
+            }
+
+            @Override
+            public BoardDto read(Integer bno) throws Exception {
+                BoardDto boardDto = boardDao.select(bno);
+                boardDao.increaseViewCnt(bno);
+
+                return boardDto;
+            }
+
+            @Override
+            public List<BoardDto> getPage(Map map) throws Exception {
+                return boardDao.selectPage(map);
+            }
+
+            @Override
+            public int modify(BoardDto boardDto) throws Exception {
+                return boardDao.update(boardDto);
+            }
+        }
+
+
+
+<div class="search-container">
+            <form action="<c:url value="/board/list"/>" class="search-form" method="get">
+                <select class="search-option" name="option">
+                    <option value="A" ${ph.sc.option=='A' || ph.sc.option=='' ? "selected" : ""}>제목+내용</option>
+                    <option value="T" ${ph.sc.option=='T' ? "selected" : ""}>제목만</option>
+                    <option value="W" ${ph.sc.option=='W' ? "selected" : ""}>작성자</option>
+                </select>
+
+                <input type="text" name="keyword" class="search-input" type="text" value="${ph.sc.keyword}" placeholder="검색어를 입력해주세요">
+                <input type="submit" class="search-button" value="검색">
+            </form>
+            <button id="writeBtn" class="btn-write" onclick="location.href='<c:url value="/board/write"/>'"><i class="fa fa-pencil"></i> 글쓰기</button>
+        </div>
